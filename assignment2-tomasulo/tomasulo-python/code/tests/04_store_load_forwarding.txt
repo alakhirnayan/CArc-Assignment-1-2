@@ -1,0 +1,20 @@
+# Memory disambiguation: loads that must forward from an older store,
+# a load to a different address, and a store whose data arrives late.
+                # of rs         Cycles in EX    Cycles in Mem   # of FUs
+Integer adder   2               1                               1
+FP adder        3               3                               1
+FP multiplier   2               6                               1
+Load/store unit 6               1               4               1
+
+ROB entries = 32
+R1=16, F1=2.5, F2=4.0
+Mem[16]=1.0, Mem[20]=5.0
+
+Add.d F3 F1 F2
+Sd F3 0(R1)
+Ld F4 0(R1)
+Ld F5 4(R1)
+Mult.d F6 F4 F5
+Sd F6 8(R1)
+Ld F7 8(R1)
+Sub.d F8 F7 F3

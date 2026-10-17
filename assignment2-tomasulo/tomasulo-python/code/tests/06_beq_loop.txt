@@ -1,0 +1,18 @@
+# Beq / Bne mix: a backward always-taken Beq closes the loop and a forward
+# Beq exits it. Also checks that writes to R0 are ignored.
+                # of rs         Cycles in EX    Cycles in Mem   # of FUs
+Integer adder   3               1                               1
+FP adder        3               3                               1
+FP multiplier   2               5                               1
+Load/store unit 3               1               4               1
+
+ROB entries = 32
+R1=3
+
+Addi R0 R0 5
+Addi R2 R0 0
+Addi R3 R3 2
+Addi R2 R2 1
+Beq R2 R1 1
+Beq R0 R0 -4
+Add R4 R3 R2

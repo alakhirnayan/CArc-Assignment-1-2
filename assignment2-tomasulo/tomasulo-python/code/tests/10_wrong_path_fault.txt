@@ -1,0 +1,14 @@
+# The always-taken Beq is predicted not taken the first time, so the load
+# with an out-of-range address (256) is executed on the wrong path. Its fault
+# is only raised at commit, and the load is squashed first: R2 = 7.
+                # of rs         Cycles in EX    Cycles in Mem   # of FUs
+Integer adder   4               3                               1
+FP adder        3               3                               1
+FP multiplier   2               5                               1
+Load/store unit 3               1               5               1
+
+ROB entries = 32
+
+Beq R0 R0 1
+Ld F1 256(R0)
+Addi R2 R0 7

@@ -1,0 +1,12 @@
+# A store is the last instruction: the cycle count includes its memory write
+# (commit in cycle 3, memory busy in cycles 3-7, total 7 cycles).
+                # of rs         Cycles in EX    Cycles in Mem   # of FUs
+Integer adder   2               1                               1
+FP adder        3               3                               1
+FP multiplier   2               5                               1
+Load/store unit 3               1               5               1
+
+ROB entries = 32
+F1=7
+
+Sd F1 0(R0)

@@ -1,0 +1,38 @@
+Issue width = 1, CDB width = 1, commit width = 1, ROB entries = 32
+
+                          ISSUE   EX        MEM       WB      COMMIT
+Add.d F3 F1 F2            1       2-4       -         5       6
+Sd F3 0(R1)               2       3-3       10-13     -       10
+Ld F4 0(R1)               3       4-4       6-6       7       11
+Ld F5 4(R1)               4       5-5       6-9       10      12
+Mult.d F6 F4 F5           5       11-16     -         17      18
+Sd F6 8(R1)               6       7-7       19-22     -       19
+Ld F7 8(R1)               7       8-8       18-18     19      20
+Sub.d F8 F7 F3            8       20-22     -         23      24
+
+REGISTER VALUES
+       R0       R1       R2       R3       R4       R5       R6       R7       
+value: 0        16       0        0        0        0        0        0        
+       R8       R9       R10      R11      R12      R13      R14      R15      
+value: 0        0        0        0        0        0        0        0        
+       R16      R17      R18      R19      R20      R21      R22      R23      
+value: 0        0        0        0        0        0        0        0        
+       R24      R25      R26      R27      R28      R29      R30      R31      
+value: 0        0        0        0        0        0        0        0        
+       F0       F1       F2       F3       F4       F5       F6       F7       
+value: 0        2.5      4        6.5      6.5      5        32.5     32.5     
+       F8       F9       F10      F11      F12      F13      F14      F15      
+value: 26       0        0        0        0        0        0        0        
+       F16      F17      F18      F19      F20      F21      F22      F23      
+value: 0        0        0        0        0        0        0        0        
+       F24      F25      F26      F27      F28      F29      F30      F31      
+value: 0        0        0        0        0        0        0        0        
+
+NON-ZERO MEMORY VALUES
+Addresses   Values
+16          6.5
+20          5
+24          32.5
+
+Cycles: 24   Committed instructions: 8   IPC: 0.333
+Branches issued: 0   Mispredicted: 0   Memory-order violations: 0   Squashed instructions: 0
