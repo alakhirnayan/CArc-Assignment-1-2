@@ -4,13 +4,13 @@
 
 '''
 MEM stage for loads (stores write memory at commit, see commit.py)
-1. a load whose address is ready looks for the youngest older store in the
-   ld/sd queue with a known, matching address
-    -- found: forward its data (1 cycle), or wait if that data is not ready yet
-    -- not found: access memory (single port, non-pipelined, `mem_cycles`
-       cycles), even if some older store addresses are still unknown
-2. if one of those older stores later turns out to have the same address, the
-   load and everything after it are squashed and refetched (exe.py)
+1. a load whose address is ready checks the older stores in the ld/sd queue
+    -- any address unresolved: access memory, even if another store matches
+    -- all addresses known: forward from the youngest matching store (1 cycle),
+       waiting for its data if needed; if no match exists, access memory
+    -- memory access uses the single, non-pipelined port for `mem_cycles` cycles
+2. stores check for stale younger loads both when their address resolves and
+   when they commit; stale loads and their younger instructions are replayed
 3. a load leaves the ld/sd queue once it has its data
 '''
 
@@ -25,11 +25,14 @@ def mem(m, cycle):
             continue
         if entry.addr is None or entry.ex_end >= cycle:
             continue
+        older_stores = [s for s in m.ld_sd_queue[:i] if s.instr.is_store]
+        unresolved = any(s.addr is None or s.ex_end >= cycle for s in older_stores)
         match = None
-        for store in reversed(m.ld_sd_queue[:i]):
-            if store.instr.is_store and store.addr == entry.addr:
-                match = store
-                break
+        if not unresolved:
+            for store in reversed(older_stores):
+                if store.addr == entry.addr:
+                    match = store
+                    break
         if match is not None:
             # forwarding from a store takes 1 cycle
             if match.op2.is_ready(cycle):

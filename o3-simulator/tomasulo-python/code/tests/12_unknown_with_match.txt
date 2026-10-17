@@ -1,0 +1,11 @@
+# A known match must not override an unresolved older store.
+Integer adder 4 8 1
+Load/store unit 8 1 3 2
+ROB entries = 32
+F1=9, F2=11
+Mem[4]=2
+
+Addi R1 R0 4
+Sd F1 0(R1)
+Sd F2 4(R0)
+Ld F3 4(R0)

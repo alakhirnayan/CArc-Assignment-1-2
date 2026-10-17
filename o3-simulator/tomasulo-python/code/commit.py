@@ -10,6 +10,8 @@ Commit up to `commit_width` instructions per cycle from the ROB head, in order
        the ld/sd queue
     -- an instruction with a recorded fault raises the error here
 '''
+from exe import check_memory_order
+
 
 # function: try to commit the ROB head; return True on success
 def commit_head(m, entry, cycle):
@@ -30,6 +32,9 @@ def commit_head(m, entry, cycle):
         m.mem_owner = entry
         m.memory[entry.addr] = entry.op2.value
         m.ld_sd_queue.remove(entry)
+        # A load may have bypassed this known address because a different
+        # older store was unresolved. Catch it before any stale load retires.
+        check_memory_order(m, entry, cycle)
         return True
     if entry.wb is None or entry.wb >= cycle:
         return False

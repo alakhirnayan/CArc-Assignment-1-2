@@ -18,7 +18,8 @@ cd code
 python3 main.py                              # runs test_case.txt
 python3 main.py tests/03_loop_branch.txt     # any input file
 python3 main.py tests/03_loop_branch.txt -w 4 -s
-python3 run_tests.py                         # correctness check, all tests, widths 1-4
+python3 run_tests.py                         # 14 programs, widths 1-4 (56 runs)
+python3 -m unittest -v test_memory_rules      # memory-rule regression checks
 ```
 
 Options:
@@ -66,6 +67,7 @@ Text after `#` is a comment. Registers and memory start at zero.
 | `code/commit.py` | in-order commit, stores write memory, faults raised at commit |
 | `code/print_status.py` | output (instruction table, registers, non-zero memory) |
 | `code/run_tests.py` | checks every test against an in-order reference interpreter at widths 1–4 |
+| `code/test_memory_rules.py` | unresolved-store priority, commit-time replay and generated-program checks |
 | `code/tests/` | test cases |
 | `results/` | simulator output for every test at widths 1–4 |
 | `original_code/` | the single-issue code this work started from |
@@ -73,15 +75,22 @@ Text after `#` is a comment. Registers and memory start at zero.
 
 ## Behaviour notes
 
-* Loads follow the assignment: a load forwards from the youngest older store
-  with a known matching address, otherwise it reads memory even if some older
-  store addresses are still unknown. When such a store's address is computed
-  and matches a load that already read memory, that load and everything after
-  it are squashed and refetched (counted as a memory-order violation).
+* If any older store address is unresolved, a load accesses memory, even when
+  another older store has a known matching address. Once all older addresses
+  are known, it forwards from the youngest matching store (waiting for its data)
+  or reads memory if no match exists. Forwarding takes one cycle.
+* Stores check for stale younger loads when their address resolves and again
+  when they commit. The second check covers a known matching store that a load
+  bypassed because another store was unresolved. A conflicting load and all
+  younger instructions are squashed and refetched after one recovery cycle.
 * An out-of-range address or branch target is recorded on the instruction and
   raised only if that instruction reaches commit, so wrong-path faults are
   squashed silently.
 * The cycle total includes the memory write of the last committed store.
 
-`python3 run_tests.py` runs 12 test programs at widths 1–4 (48 runs); all
+`python3 run_tests.py` runs 14 test programs at widths 1–4 (56 runs); all
 match the in-order reference interpreter.
+
+The four methods in `test_memory_rules.py` check three fixed cases at all four
+widths (12 directed checks), plus 30 generated programs at all four widths
+(120 runs). The generated programs use a fixed seed so results are reproducible.

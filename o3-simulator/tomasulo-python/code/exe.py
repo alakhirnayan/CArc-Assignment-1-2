@@ -74,7 +74,7 @@ def squash_after(m, keep_seq, new_pc, cycle):
     m.fetch_resume = cycle + 2
 
 
-# function: a store address is known; find younger loads that read a stale value
+# function: at store address resolution or commit, find stale younger loads
 def check_memory_order(m, store, cycle):
     stale = [e for e in m.rob
              if e.instr.is_load and e.seq > store.seq and e.mem_start is not None
