@@ -4,8 +4,8 @@ Al-Akhir Nayan · PSID 2371302
 
 | Assignment | Report | Code and README |
 |---|---|---|
-| 1. Pentium M branch predictor | [Branch-Prediction-Solution.pdf](branch-prediction/Branch-Prediction-Solution.pdf) | [cbp2-infrastructure-v2/](branch-prediction/cbp2-infrastructure-v2/) |
-| 2. Tomasulo algorithm with multiple issue | [Tomasulo-Simulator-Solution.pdf](o3-simulator/Tomasulo-Simulator-Solution.pdf) | [tomasulo-python/](o3-simulator/tomasulo-python/) |
+| 1. Pentium M branch predictor | [BranchPredictionReport.pdf](branch-prediction/BranchPredictionReport.pdf) | [cbp2-infrastructure-v2/](branch-prediction/cbp2-infrastructure-v2/) |
+| 2. Tomasulo algorithm with multiple issue | [TomasuloReport.pdf](o3-simulator/TomasuloReport.pdf) | [tomasulo-python/](o3-simulator/tomasulo-python/) |
 
 Each report is also included as a `.docx`. Run either command block below from
 the repository root.

@@ -34,4 +34,4 @@ Build options (add them to `CXXFLAGS` in `src/Makefile`):
 | `src/my_predictor.h` | `pm_predictor` (this assignment); the sample `gshare_predictor` is unchanged |
 | `results_pm4.txt` | output of `./run traces` with the default (4-way) predictor |
 | `results_comparison.txt` | MPKI of all predictor variants on all 20 traces |
-| `../Branch-Prediction-Solution.pdf` (also `.docx`) | assignment report |
+| `../BranchPredictionReport.pdf` (also `.docx`) | assignment report |

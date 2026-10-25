@@ -71,7 +71,7 @@ Text after `#` is a comment. Registers and memory start at zero.
 | `code/tests/` | test cases |
 | `results/` | simulator output for every test at widths 1–4 |
 | `original_code/` | the single-issue code this work started from |
-| `../Tomasulo-Simulator-Solution.pdf` (also `.docx`) | assignment report |
+| `../TomasuloReport.pdf` (also `.docx`) | assignment report |
 
 ## Behaviour notes
 
